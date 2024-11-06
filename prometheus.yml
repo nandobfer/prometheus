@@ -19,6 +19,6 @@ scrape_configs:
  - job_name: wagazap.api
    static_configs:
     - targets:
-       - wagazap.boz.app.br
+       - wagazapapi.boz.app.br
       labels:
         api: 'wagazap.api'
