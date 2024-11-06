@@ -1,0 +1,48 @@
+version: '3'
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus_data:/prometheus"
+    networks:
+      - localprom
+    ports:
+      - 9090:9090
+  
+  node-exporter:
+    image: prom/node-exporter
+    networks:
+      - localprom
+    ports:
+      - 9100:9100
+  
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=Ewhblt69!@#
+    ports:
+      - 3000:3000
+    networks:
+      - localprom
+
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    command: 
+     - --config.my-cnf=/cfg/.my.cnf
+     - --mysqld.address=boz.app.br:3306
+    volumes:
+      - "./.my.cnf:/cfg/.my.cnf"
+    ports:
+      - 9104:9104
+    networks:
+      - localprom
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  localprom:
+    driver: bridge
